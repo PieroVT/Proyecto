@@ -79,7 +79,7 @@ public class LoginVendedor extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+/*falta actualizar para verlo en view*/
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
         String codigo = txtCodigoVendedor.getText();
