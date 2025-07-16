@@ -7,10 +7,8 @@ public class Cliente {
     private String cli_direcc;
     private String cli_email;
     private String cli_estcod;
-   
-    public Cliente() {
-    }    
 
+    // Getters y Setters
     public String getCli_codigo() {
         return cli_codigo;
     }
@@ -59,9 +57,8 @@ public class Cliente {
         this.cli_estcod = cli_estcod;
     }
 
-    
-   
-   
-    
-    
+    @Override
+    public String toString() {
+        return "Código: " + cli_codigo + " | Razon Social: " + cli_razsoc;
+    }
 }

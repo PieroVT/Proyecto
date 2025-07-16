@@ -1,4 +1,5 @@
 package DataAccessObject;
+
 import BusinessEntity.Cliente;
 import java.util.List;
 import java.sql.PreparedStatement;
@@ -6,16 +7,15 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-        
-public class ClienteDAO extends ConexionMySQL implements IBaseDAO<Cliente>
-{
-    public static void main(String[] args){
+public class ClienteDAO extends ConexionMySQL implements IBaseDAO<Cliente> {
+
+    public static void main(String[] args) {
         System.out.println("USANDO LA CLASE CLIENTE DAO");
         ClienteDAO myDAO = new ClienteDAO();
-        
+
         // Ejemplo de lectura de un cliente
         Cliente myCliente = myDAO.Read("CLI001");
-        if(myCliente != null && myCliente.getCli_codigo() != null) {
+        if (myCliente != null && myCliente.getCli_codigo() != null) {
             System.out.println("Código: " + myCliente.getCli_codigo());
             System.out.println("Documento: " + myCliente.getCli_docnum());
             System.out.println("Razón Social: " + myCliente.getCli_razsoc());
@@ -30,18 +30,18 @@ public class ClienteDAO extends ConexionMySQL implements IBaseDAO<Cliente>
                         "cli_direcc, cli_email, cli_estcod) " +
                         "VALUES(?,?,?,?,?,?)";
             PreparedStatement pst = getConexion().prepareStatement(SQL);
-            
+
             pst.setString(1, input.getCli_codigo());
             pst.setString(2, input.getCli_docnum());
             pst.setString(3, input.getCli_razsoc());
             pst.setString(4, input.getCli_direcc());
             pst.setString(5, input.getCli_email());
             pst.setString(6, input.getCli_estcod());
-            
+
             int rowsAffected = pst.executeUpdate();
             result = rowsAffected > 0;
-            
-        } catch(Exception e) {
+
+        } catch (Exception e) {
             System.out.println("Error en Create: " + e.getMessage());
         }
         return result;
@@ -55,8 +55,8 @@ public class ClienteDAO extends ConexionMySQL implements IBaseDAO<Cliente>
             PreparedStatement pst = getConexion().prepareStatement(SQL);
             pst.setString(1, id);
             ResultSet res = pst.executeQuery();
-            
-            if(res.next()) {
+
+            if (res.next()) {
                 cliente.setCli_codigo(res.getString("cli_codigo"));
                 cliente.setCli_docnum(res.getString("cli_docnum"));
                 cliente.setCli_razsoc(res.getString("cli_razsoc"));
@@ -64,7 +64,7 @@ public class ClienteDAO extends ConexionMySQL implements IBaseDAO<Cliente>
                 cliente.setCli_email(res.getString("cli_email"));
                 cliente.setCli_estcod(res.getString("cli_estcod"));
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("Error en Read: " + e.getMessage());
         }
         return cliente;
@@ -78,8 +78,8 @@ public class ClienteDAO extends ConexionMySQL implements IBaseDAO<Cliente>
             Statement stm = getConexion().createStatement();
             ResultSet res = stm.executeQuery(SQL);
             lst = new ArrayList<>();
-            
-            while(res.next()) {
+
+            while (res.next()) {
                 Cliente cliente = new Cliente();
                 cliente.setCli_codigo(res.getString("cli_codigo"));
                 cliente.setCli_docnum(res.getString("cli_docnum"));
@@ -87,10 +87,10 @@ public class ClienteDAO extends ConexionMySQL implements IBaseDAO<Cliente>
                 cliente.setCli_direcc(res.getString("cli_direcc"));
                 cliente.setCli_email(res.getString("cli_email"));
                 cliente.setCli_estcod(res.getString("cli_estcod"));
-                
+
                 lst.add(cliente);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("Error en ReadAll: " + e.getMessage());
         }
         return lst;
@@ -104,18 +104,18 @@ public class ClienteDAO extends ConexionMySQL implements IBaseDAO<Cliente>
                         "cli_direcc=?, cli_email=?, cli_estcod=? " +
                         "WHERE cli_codigo=?";
             PreparedStatement pst = getConexion().prepareStatement(SQL);
-            
+
             pst.setString(1, input.getCli_docnum());
             pst.setString(2, input.getCli_razsoc());
             pst.setString(3, input.getCli_direcc());
             pst.setString(4, input.getCli_email());
             pst.setString(5, input.getCli_estcod());
             pst.setString(6, input.getCli_codigo());
-            
+
             int rowsAffected = pst.executeUpdate();
             result = rowsAffected > 0;
-            
-        } catch(Exception e) {
+
+        } catch (Exception e) {
             System.out.println("Error en Update: " + e.getMessage());
         }
         return result;
@@ -128,14 +128,14 @@ public class ClienteDAO extends ConexionMySQL implements IBaseDAO<Cliente>
             String SQL = "DELETE FROM cliente WHERE cli_codigo = ?";
             PreparedStatement pst = getConexion().prepareStatement(SQL);
             pst.setString(1, id);
-            
+
             int rowsAffected = pst.executeUpdate();
             result = rowsAffected > 0;
-            
-        } catch(Exception e) {
+
+        } catch (Exception e) {
             System.out.println("Error en Delete: " + e.getMessage());
         }
         return result;
     }
-    
+
 }
