@@ -5,7 +5,7 @@ import java.util.Scanner;
 import DataAccessObject.ClienteDAO;
 import BusinessEntity.Cliente;
 
-public class MainConsola {
+public class Consola {
 
     static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=ENVIOS;encrypt=true;trustServerCertificate=true;";
     static final String USER = "sa";
@@ -19,10 +19,10 @@ public class MainConsola {
     public static void main(String[] args) {
         try {
             conn = DriverManager.getConnection(URL, USER, PASS);
-            System.out.println("✅ Conexión a SQL Server establecida.");
+           
             loginVendedor();
         } catch (SQLException e) {
-            System.out.println("❌ Error al conectar a la base de datos: " + e.getMessage());
+   
         }
     }
 
@@ -40,16 +40,16 @@ public class MainConsola {
             if (rs.next()) {
                 vnd_codigo = rs.getString("vnd_codigo");
                 vnd_nombre = rs.getString("vnd_nombres");
-                System.out.println("👋 Bienvenido, " + vnd_nombre);
+                System.out.println(" Bienvenido, " + vnd_nombre);
                 menuPrincipal();
             } else {
-                System.out.println("❌ Código de vendedor no válido.");
+                System.out.println(" Código de vendedor no válido.");
             }
 
             rs.close();
             pst.close();
         } catch (SQLException e) {
-            System.out.println("❌ Error al validar vendedor: " + e.getMessage());
+            System.out.println(" Error al validar vendedor: " + e.getMessage());
         }
     }
 
@@ -79,17 +79,17 @@ public class MainConsola {
                     mostrarArticulos();
                     break;
                 case 0:
-                    System.out.println("👋 Cerrando sesión...");
+                    System.out.println("Hasta Luego");
                     break;
                 default:
-                    System.out.println("❌ Opción inválida.");
+                    System.out.println(" Opción inválida.");
             }
         } while (opcion != 0);
     }
 
     static void nuevaVenta() {
     try {
-        System.out.println("🔖 Registro de nueva venta");
+        System.out.println("Registro de nueva venta");
         System.out.print("Ingrese código del cliente (ej: CLI001): ");
         String cliCodigo = scanner.nextLine();
 
@@ -106,7 +106,7 @@ public class MainConsola {
         ResultSet rsPrecio = pstPrecio.executeQuery();
 
         if (!rsPrecio.next()) {
-            System.out.println("❌ Artículo no encontrado.");
+            System.out.println(" Artículo no encontrado.");
             return;
         }
 
@@ -115,11 +115,11 @@ public class MainConsola {
         double igv = subtotal * 0.18;
         double total = subtotal + igv;
 
-        // Generar correlativo de venta
+       
         String venCorrel = "VEN" + String.format("%03d", (int) (Math.random() * 1000));
         String venSunat = "SUNAT" + String.format("%03d", (int) (Math.random() * 1000));
 
-        // Insertar en tabla venta
+       
         String sqlVenta = "INSERT INTO venta (ven_correl, ven_sunat, ven_fecemi, ven_subtotal, ven_igv, ven_dscto, ven_total, ven_estcod, vnd_codigo, cli_codigo) VALUES (?, ?, GETDATE(), ?, ?, 0, ?, 1, ?, ?)";
         PreparedStatement pstVenta = conn.prepareStatement(sqlVenta);
         pstVenta.setString(1, venCorrel);
@@ -131,7 +131,7 @@ public class MainConsola {
         pstVenta.setString(7, cliCodigo);
         pstVenta.executeUpdate();
 
-        // Insertar detalle de venta
+      
         String sqlDetalle = "INSERT INTO venta_detalle (ven_correl, art_codigo, ven_precio, ven_cantidad, ven_dsct, ven_igv, ven_subtotal) VALUES (?, ?, ?, ?, 0, ?, ?)";
         PreparedStatement pstDetalle = conn.prepareStatement(sqlDetalle);
         pstDetalle.setString(1, venCorrel);
@@ -142,10 +142,10 @@ public class MainConsola {
         pstDetalle.setDouble(6, subtotal);
         pstDetalle.executeUpdate();
 
-        System.out.println("✅ Venta registrada correctamente con código: " + venCorrel);
+        System.out.println("Venta registrada correctamente con código: " + venCorrel);
 
     } catch (SQLException | NumberFormatException e) {
-        System.out.println("❌ Error al registrar venta: " + e.getMessage());
+        System.out.println(" Error al registrar venta: " + e.getMessage());
     }
 }
 
@@ -163,9 +163,9 @@ public class MainConsola {
         Cliente cli = dao.Read(codigo);
 
         if (cli.getCli_codigo() == null) {
-            System.out.println("❌ Cliente no encontrado.");
+            System.out.println(" Cliente no encontrado.");
         } else {
-            System.out.println("🧾 Cliente:");
+            System.out.println("Cliente:");
             System.out.println("Razón Social: " + cli.getCli_razsoc());
             System.out.println("Email: " + cli.getCli_email());
             System.out.println("Dirección: " + cli.getCli_direcc());
@@ -187,18 +187,18 @@ public class MainConsola {
         nuevo.setCli_estcod(scanner.nextLine());
 
         if (dao.Create(nuevo)) {
-            System.out.println("✅ Cliente registrado correctamente.");
+            System.out.println("Cliente registrado correctamente.");
         } else {
-            System.out.println("❌ Error al registrar cliente.");
+            System.out.println(" Error al registrar cliente.");
         }
     } else {
-        System.out.println("❌ Opción inválida.");
+        System.out.println(" Opción inválida.");
     }
 }
 
 
     static void mostrarVentas() {
-        System.out.println("🧾 Ventas registradas:");
+        System.out.println("Ventas registradas:");
         try {
             String sql = "SELECT ven_correl, ven_fecemi, cli_codigo, ven_total FROM venta ORDER BY ven_fecemi DESC";
             Statement stmt = conn.createStatement();
@@ -206,20 +206,20 @@ public class MainConsola {
 
             while (rs.next()) {
                 System.out.println("Venta: " + rs.getString("ven_correl") +
-                                   " | Fecha: " + rs.getDate("ven_fecemi") +
-                                   " | Cliente: " + rs.getString("cli_codigo") +
-                                   " | Total: " + rs.getDouble("ven_total"));
+                                   " Fecha: " + rs.getDate("ven_fecemi") +
+                                   " Cliente: " + rs.getString("cli_codigo") +
+                                   " Total: " + rs.getDouble("ven_total"));
             }
 
             rs.close();
             stmt.close();
         } catch (SQLException e) {
-            System.out.println("❌ Error al obtener ventas: " + e.getMessage());
+            System.out.println(" Error al obtener ventas: " + e.getMessage());
         }
     }
 
     static void mostrarArticulos() {
-        System.out.println("📦 Lista de artículos:");
+        System.out.println("Lista de artículos:");
         try {
             String sql = "SELECT art_codigo, art_description, art_precio FROM Articulo";
             Statement stmt = conn.createStatement();
@@ -234,7 +234,7 @@ public class MainConsola {
             rs.close();
             stmt.close();
         } catch (SQLException e) {
-            System.out.println("❌ Error al obtener artículos: " + e.getMessage());
+            System.out.println("Error al obtener artículos: " + e.getMessage());
         }
     }
 }
