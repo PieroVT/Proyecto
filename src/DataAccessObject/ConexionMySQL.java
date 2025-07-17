@@ -1,40 +1,25 @@
 package DataAccessObject;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.DriverManager;
-import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 
 public class ConexionMySQL {
-    
-   
-    private final String StrConxSQLServer = "jdbc:sqlserver://localhost:1433;databaseName=ENVIOS;encrypt=true;trustServerCertificate=true;";
-    private final String StrUserSQLServer = "sa";
-    private final String StrPassSQLServer = "123456789";
-    private Connection Conexion;
+    private final String URL = "jdbc:sqlserver://localhost:1433;databaseName=ENVIOS;encrypt=true;trustServerCertificate=true;";
+    private final String USER = "sa";
+    private final String PASS = "123456789";
+    private Connection conexion;
 
-  
     public ConexionMySQL() {
-       
         try {
-        
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            
-     
-            Conexion = DriverManager.getConnection(StrConxSQLServer, StrUserSQLServer, StrPassSQLServer);
-            
-   
-          
-        } catch (ClassNotFoundException | SQLException e) {
-            
+            conexion = DriverManager.getConnection(URL, USER, PASS);
+            System.out.println("Conectado a SQL Server");
+        } catch (SQLException e) {
+            System.out.println(" Error en conexión: " + e.getMessage());
         }
     }
 
-
-    public static void main(String[] args) {
-        ConexionMySQL cn = new ConexionMySQL();
-    }
     public Connection getConexion() {
-        return Conexion;
+        return conexion;
     }
 }
